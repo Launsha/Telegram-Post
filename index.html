@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Content Poster</title>
+    <title>Pengirim Konten Telegram</title>
     <style>
         :root {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary: #bb86fc;
+            --primary-variant: #3700b3;
+            --secondary: #03dac6;
+            --error: #cf6679;
             --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --accent: #8774e1;
-            --accent-hover: #6a58c7;
-            --danger: #ff4d4d;
-            --success: #47d764;
-            --border: #444444;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-disabled: rgba(255, 255, 255, 0.5);
         }
 
         * {
@@ -25,9 +25,8 @@
         }
 
         body {
-            background-color: var(--bg-primary);
+            background-color: var(--bg-color);
             color: var(--text-primary);
-            line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
         }
@@ -35,82 +34,101 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: var(--bg-secondary);
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--accent);
+            color: var(--primary);
+            margin-bottom: 10px;
         }
 
-        .form-group {
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         label {
             display: block;
             margin-bottom: 8px;
             color: var(--text-secondary);
-            font-weight: 500;
         }
 
         input, textarea, select {
             width: 100%;
             padding: 12px;
-            border-radius: 5px;
-            border: 1px solid var(--border);
-            background-color: var(--bg-primary);
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
             color: var(--text-primary);
             font-size: 16px;
-            resize: vertical;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
         }
 
         textarea {
             min-height: 120px;
+            resize: vertical;
         }
 
         button {
-            background-color: var(--accent);
-            color: white;
+            background-color: var(--primary);
+            color: #000;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 4px;
             cursor: pointer;
+            font-weight: bold;
             font-size: 16px;
-            font-weight: 500;
             transition: background-color 0.3s;
-            display: block;
-            width: 100%;
         }
 
         button:hover {
-            background-color: var(--accent-hover);
+            background-color: var(--primary-variant);
+            color: #fff;
         }
 
         button:disabled {
-            background-color: var(--border);
+            background-color: var(--text-disabled);
             cursor: not-allowed;
         }
 
-        .image-preview {
-            margin-top: 10px;
-            max-width: 100%;
+        .button-container {
+            text-align: right;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 4px;
             display: none;
-            border-radius: 5px;
-            border: 1px solid var(--border);
+        }
+
+        .status.success {
+            background-color: rgba(3, 218, 198, 0.2);
+            border: 1px solid var(--secondary);
+            display: block;
+        }
+
+        .status.error {
+            background-color: rgba(207, 102, 121, 0.2);
+            border: 1px solid var(--error);
+            display: block;
         }
 
         .buttons-container {
-            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .inline-buttons {
+            margin-top: 10px;
         }
 
         .button-row {
@@ -119,319 +137,407 @@
             gap: 10px;
         }
 
-        .button-input {
-            flex: 2;
+        .button-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .url-input {
-            flex: 3;
-        }
-
-        .remove-button {
-            background-color: var(--danger);
-            padding: 8px;
-            flex: 0 0 40px;
-        }
-
-        .remove-button:hover {
-            background-color: #ff3333;
+        .button-input-group input {
+            flex: 1;
+            margin-bottom: 0;
         }
 
         .add-button-row {
+            background-color: var(--secondary);
+            color: #000;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .remove-button {
+            background-color: var(--error);
+            color: #fff;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
             margin-top: 10px;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-        }
-
-        .add-button-row:hover {
-            background-color: #333333;
-        }
-
-        .status {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
+            border-radius: 4px;
             display: none;
         }
 
-        .status.success {
-            background-color: var(--success);
-            color: white;
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
-        .status.error {
-            background-color: var(--danger);
-            color: white;
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
         }
 
-        .token-section {
-            margin-bottom: 30px;
-            background-color: rgba(135, 116, 225, 0.1);
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 4px solid var(--accent);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .token-display {
-            font-family: monospace;
-            background-color: var(--bg-primary);
-            padding: 8px;
-            border-radius: 4px;
-            word-break: break-all;
+        #messageHelp {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: -15px;
+            margin-bottom: 15px;
         }
 
-        @media (max-width: 600px) {
-            .button-row {
-                flex-direction: column;
-            }
-            
-            .remove-button {
-                margin-top: 5px;
-                width: 100%;
-                flex: auto;
-            }
+        .setting-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .setting-option input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            margin-bottom: 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Telegram Content Poster</h1>
-        
-        <div class="token-section">
-            <label>Bot API Token:</label>
-            <div class="token-display" id="token-display">8016277246:AAFePmjDAxkTEZbd5jKyDHEIyrjoCI2oxas</div>
+        <header>
+            <h1>Pengirim Konten Telegram</h1>
+            <p>Kirim pesan dan gambar ke channel/grup Telegram dengan mudah</p>
+        </header>
+
+        <div class="card">
+            <form id="telegramForm">
+                <div class="setting-option">
+                    <input type="checkbox" id="silentPost" name="silentPost">
+                    <label for="silentPost">Kirim sebagai pesan notifikasi diam</label>
+                </div>
+
+                <div class="setting-option">
+                    <input type="checkbox" id="protectContent" name="protectContent">
+                    <label for="protectContent">Lindungi konten dari penerusan dan tangkapan layar</label>
+                </div>
+
+                <label for="chatId">ID Chat/Channel/Grup Telegram</label>
+                <input type="text" id="chatId" name="chatId" placeholder="Contoh: @namachannel atau -1001234567890" required>
+
+                <label for="message">Pesan</label>
+                <textarea id="message" name="message" placeholder="Tulis pesan yang ingin diposting..." required></textarea>
+                <div id="messageHelp">Mendukung format Markdown. *tebal*, _miring_, `kode`, [tautan](https://example.com)</div>
+
+                <label for="image">Gambar (Opsional)</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <img id="previewImage" class="preview-image" alt="Pratinjau gambar">
+
+                <div class="buttons-container">
+                    <label>Tombol Inline (Opsional)</label>
+                    <div class="inline-buttons" id="inlineButtons">
+                        <div class="button-row">
+                            <div class="button-input-group">
+                                <input type="text" placeholder="Teks Tombol" class="button-text">
+                                <input type="text" placeholder="URL Tombol" class="button-url">
+                            </div>
+                            <button type="button" class="remove-button">❌</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addButtonRow" class="add-button-row">Tambah Tombol</button>
+                </div>
+
+                <div class="button-container">
+                    <div id="status" class="status"></div>
+                    <button type="submit" id="submitButton">Kirim ke Telegram</button>
+                </div>
+            </form>
         </div>
-        
-        <div class="form-group">
-            <label for="chatId">Chat ID (optional - only if you know it):</label>
-            <input type="text" id="chatId" placeholder="Leave empty to post to any chat the bot is added to">
-        </div>
-        
-        <div class="form-group">
-            <label for="message">Message:</label>
-            <textarea id="message" placeholder="Enter your message here..."></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="image">Image (optional):</label>
-            <input type="file" id="image" accept="image/*">
-            <img id="imagePreview" class="image-preview">
-        </div>
-        
-        <div class="form-group">
-            <label>Inline Buttons:</label>
-            <div id="buttonsContainer" class="buttons-container"></div>
-            <button id="addButtonRow" class="add-button-row">Add Button</button>
-        </div>
-        
-        <button id="sendButton">Send to Telegram</button>
-        
-        <div id="status" class="status"></div>
+
+        <footer>
+            <p>© 2025 Pengirim Konten Telegram | Dibuat untuk memudahkan pengelolaan konten Telegram</p>
+        </footer>
     </div>
 
     <script>
-        // Configuration
+        // Konstanta untuk API Telegram
         const API_TOKEN = '8016277246:AAFePmjDAxkTEZbd5jKyDHEIyrjoCI2oxas';
-        const API_URL = `https://api.telegram.org/bot${API_TOKEN}`;
-        
-        // Elements
+        const BASE_URL = `https://api.telegram.org/bot${API_TOKEN}`;
+
+        // DOM Elements
+        const form = document.getElementById('telegramForm');
         const chatIdInput = document.getElementById('chatId');
         const messageInput = document.getElementById('message');
         const imageInput = document.getElementById('image');
-        const imagePreview = document.getElementById('imagePreview');
-        const buttonsContainer = document.getElementById('buttonsContainer');
-        const addButtonRow = document.getElementById('addButtonRow');
-        const sendButton = document.getElementById('sendButton');
+        const previewImage = document.getElementById('previewImage');
+        const inlineButtonsContainer = document.getElementById('inlineButtons');
+        const addButtonRowBtn = document.getElementById('addButtonRow');
+        const submitButton = document.getElementById('submitButton');
         const statusDiv = document.getElementById('status');
-        
+        const silentPostCheckbox = document.getElementById('silentPost');
+        const protectContentCheckbox = document.getElementById('protectContent');
+
         // Event listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Add first button row by default
-            addNewButtonRow();
-            
-            // Add button event
-            addButtonRow.addEventListener('click', addNewButtonRow);
-            
-            // Send button event
-            sendButton.addEventListener('click', sendMessage);
-            
-            // Image preview
-            imageInput.addEventListener('change', handleImagePreview);
-        });
-        
-        // Functions
-        function addNewButtonRow() {
-            const buttonRow = document.createElement('div');
-            buttonRow.className = 'button-row';
-            
-            const buttonTextInput = document.createElement('input');
-            buttonTextInput.className = 'button-input';
-            buttonTextInput.type = 'text';
-            buttonTextInput.placeholder = 'Button Text';
-            
-            const buttonUrlInput = document.createElement('input');
-            buttonUrlInput.className = 'url-input';
-            buttonUrlInput.type = 'text';
-            buttonUrlInput.placeholder = 'URL (https://...)';
-            
-            const removeButton = document.createElement('button');
-            removeButton.className = 'remove-button';
-            removeButton.textContent = 'X';
-            removeButton.addEventListener('click', () => {
-                buttonRow.remove();
-            });
-            
-            buttonRow.appendChild(buttonTextInput);
-            buttonRow.appendChild(buttonUrlInput);
-            buttonRow.appendChild(removeButton);
-            
-            buttonsContainer.appendChild(buttonRow);
-        }
-        
-        function handleImagePreview(event) {
+        imageInput.addEventListener('change', previewSelectedImage);
+        addButtonRowBtn.addEventListener('click', addButtonRow);
+        form.addEventListener('submit', handleFormSubmit);
+
+        // Fungsi untuk menampilkan pratinjau gambar
+        function previewSelectedImage(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                }
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                };
                 reader.readAsDataURL(file);
             } else {
-                imagePreview.style.display = 'none';
+                previewImage.style.display = 'none';
             }
         }
-        
-        function showStatus(message, isError = false) {
-            statusDiv.textContent = message;
-            statusDiv.className = isError ? 'status error' : 'status success';
-            statusDiv.style.display = 'block';
+
+        // Fungsi untuk menambahkan baris tombol baru
+        function addButtonRow() {
+            const buttonRow = document.createElement('div');
+            buttonRow.className = 'button-row';
             
-            setTimeout(() => {
-                statusDiv.style.display = 'none';
-            }, 5000);
+            buttonRow.innerHTML = `
+                <div class="button-input-group">
+                    <input type="text" placeholder="Teks Tombol" class="button-text">
+                    <input type="text" placeholder="URL Tombol" class="button-url">
+                </div>
+                <button type="button" class="remove-button">❌</button>
+            `;
+            
+            buttonRow.querySelector('.remove-button').addEventListener('click', function() {
+                buttonRow.remove();
+            });
+            
+            inlineButtonsContainer.appendChild(buttonRow);
         }
-        
-        async function sendMessage() {
-            try {
-                sendButton.disabled = true;
+
+        // Listener untuk tombol hapus yang sudah ada
+        document.querySelector('.remove-button').addEventListener('click', function() {
+            if (inlineButtonsContainer.children.length > 1) {
+                this.closest('.button-row').remove();
+            }
+        });
+
+        // Fungsi untuk mengumpulkan data tombol inline
+        function collectInlineButtons() {
+            const buttonRows = inlineButtonsContainer.querySelectorAll('.button-row');
+            const buttons = [];
+            
+            buttonRows.forEach(row => {
+                const textInput = row.querySelector('.button-text');
+                const urlInput = row.querySelector('.button-url');
                 
-                // Validate inputs
-                if (!messageInput.value.trim()) {
-                    showStatus('Please enter a message', true);
-                    sendButton.disabled = false;
-                    return;
+                if (textInput.value.trim() !== '' && urlInput.value.trim() !== '') {
+                    buttons.push({
+                        text: textInput.value.trim(),
+                        url: urlInput.value.trim()
+                    });
+                }
+            });
+            
+            return buttons;
+        }
+
+        // Fungsi untuk mengirim pesan ke Telegram
+        async function sendMessageToTelegram(chatId, text, buttons, silentPost, protectContent) {
+            const url = `${BASE_URL}/sendMessage`;
+            
+            // Buat inline keyboard jika ada tombol
+            let reply_markup = null;
+            if (buttons.length > 0) {
+                // Kelompokkan tombol dalam baris (maksimal 2 tombol per baris)
+                const inlineKeyboard = [];
+                for (let i = 0; i < buttons.length; i += 2) {
+                    const row = [];
+                    row.push(buttons[i]);
+                    
+                    if (i + 1 < buttons.length) {
+                        row.push(buttons[i + 1]);
+                    }
+                    
+                    inlineKeyboard.push(row);
                 }
                 
-                // Gather inline keyboard buttons
+                reply_markup = {
+                    inline_keyboard: inlineKeyboard.map(row => 
+                        row.map(button => ({
+                            text: button.text,
+                            url: button.url
+                        }))
+                    )
+                };
+            }
+            
+            const params = {
+                chat_id: chatId,
+                text: text,
+                parse_mode: 'Markdown',
+                disable_notification: silentPost,
+                protect_content: protectContent
+            };
+            
+            if (reply_markup) {
+                params.reply_markup = JSON.stringify(reply_markup);
+            }
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(params)
+            });
+            
+            return await response.json();
+        }
+
+        // Fungsi untuk mengirim gambar ke Telegram
+        async function sendPhotoToTelegram(chatId, caption, imageFile, buttons, silentPost, protectContent) {
+            const url = `${BASE_URL}/sendPhoto`;
+            
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', imageFile);
+            
+            if (caption) {
+                formData.append('caption', caption);
+                formData.append('parse_mode', 'Markdown');
+            }
+            
+            formData.append('disable_notification', silentPost);
+            formData.append('protect_content', protectContent);
+            
+            // Tambahkan tombol jika ada
+            if (buttons.length > 0) {
                 const inlineKeyboard = [];
-                const buttonRows = buttonsContainer.querySelectorAll('.button-row');
-                
-                buttonRows.forEach(row => {
-                    const inputs = row.querySelectorAll('input');
-                    const buttonText = inputs[0].value.trim();
-                    const buttonUrl = inputs[1].value.trim();
+                for (let i = 0; i < buttons.length; i += 2) {
+                    const row = [];
+                    row.push(buttons[i]);
                     
-                    if (buttonText && buttonUrl) {
-                        if (!inlineKeyboard.length) {
-                            inlineKeyboard.push([]);
-                        }
-                        inlineKeyboard[0].push({
-                            text: buttonText,
-                            url: buttonUrl
-                        });
+                    if (i + 1 < buttons.length) {
+                        row.push(buttons[i + 1]);
                     }
-                });
+                    
+                    inlineKeyboard.push(row);
+                }
                 
-                // Prepare message data
+                const reply_markup = {
+                    inline_keyboard: inlineKeyboard.map(row => 
+                        row.map(button => ({
+                            text: button.text,
+                            url: button.url
+                        }))
+                    )
+                };
+                
+                formData.append('reply_markup', JSON.stringify(reply_markup));
+            }
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData
+            });
+            
+            return await response.json();
+        }
+
+        // Fungsi untuk menangani pengiriman form
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // Tampilkan loading
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Mengirim... <span class="loading"></span>';
+            statusDiv.style.display = 'none';
+            
+            try {
                 const chatId = chatIdInput.value.trim();
                 const message = messageInput.value.trim();
+                const imageFile = imageInput.files[0];
+                const buttons = collectInlineButtons();
+                const silentPost = silentPostCheckbox.checked;
+                const protectContent = protectContentCheckbox.checked;
                 
-                // If there's an image
-                if (imageInput.files.length > 0) {
-                    const imageFile = imageInput.files[0];
-                    const formData = new FormData();
-                    
-                    if (chatId) {
-                        formData.append('chat_id', chatId);
-                    }
-                    
-                    formData.append('photo', imageFile);
-                    
-                    if (message) {
-                        formData.append('caption', message);
-                    }
-                    
-                    if (inlineKeyboard.length > 0) {
-                        formData.append('reply_markup', JSON.stringify({
-                            inline_keyboard: inlineKeyboard
-                        }));
-                    }
-                    
-                    // Send photo with caption
-                    const response = await fetch(`${API_URL}/sendPhoto`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.ok) {
-                        showStatus('Message with image sent successfully!');
-                        resetForm();
-                    } else {
-                        throw new Error(result.description || 'Failed to send message');
-                    }
+                let response;
+                
+                if (imageFile) {
+                    // Kirim pesan dengan gambar
+                    response = await sendPhotoToTelegram(
+                        chatId, 
+                        message, 
+                        imageFile,
+                        buttons,
+                        silentPost,
+                        protectContent
+                    );
                 } else {
-                    // Text-only message
-                    const messageData = {
-                        text: message
-                    };
+                    // Kirim pesan text saja
+                    response = await sendMessageToTelegram(
+                        chatId, 
+                        message, 
+                        buttons,
+                        silentPost,
+                        protectContent
+                    );
+                }
+                
+                if (response.ok) {
+                    // Sukses
+                    showStatus('Pesan berhasil dikirim ke Telegram!', 'success');
+                    form.reset();
+                    previewImage.style.display = 'none';
                     
-                    if (chatId) {
-                        messageData.chat_id = chatId;
-                    }
-                    
-                    if (inlineKeyboard.length > 0) {
-                        messageData.reply_markup = {
-                            inline_keyboard: inlineKeyboard
-                        };
-                    }
-                    
-                    const response = await fetch(`${API_URL}/sendMessage`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(messageData)
+                    // Reset semua baris tombol ke default
+                    inlineButtonsContainer.innerHTML = `
+                        <div class="button-row">
+                            <div class="button-input-group">
+                                <input type="text" placeholder="Teks Tombol" class="button-text">
+                                <input type="text" placeholder="URL Tombol" class="button-url">
+                            </div>
+                            <button type="button" class="remove-button">❌</button>
+                        </div>
+                    `;
+                    document.querySelector('.remove-button').addEventListener('click', function() {
+                        if (inlineButtonsContainer.children.length > 1) {
+                            this.closest('.button-row').remove();
+                        }
                     });
-                    
-                    const result = await response.json();
-                    
-                    if (result.ok) {
-                        showStatus('Message sent successfully!');
-                        resetForm();
-                    } else {
-                        throw new Error(result.description || 'Failed to send message');
-                    }
+                } else {
+                    // Error
+                    const errorMessage = response.description || 'Terjadi kesalahan saat mengirim pesan.';
+                    showStatus(`Error: ${errorMessage}`, 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showStatus(`Error: ${error.message}`, true);
+                showStatus(`Error: ${error.message}`, 'error');
             } finally {
-                sendButton.disabled = false;
+                submitButton.disabled = false;
+                submitButton.textContent = 'Kirim ke Telegram';
             }
         }
-        
-        function resetForm() {
-            messageInput.value = '';
-            imageInput.value = '';
-            imagePreview.style.display = 'none';
+
+        // Fungsi untuk menampilkan status
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
             
-            // Clear buttons except for the first one
-            buttonsContainer.innerHTML = '';
-            addNewButtonRow();
+            // Scroll ke status
+            statusDiv.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
